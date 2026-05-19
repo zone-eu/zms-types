@@ -1,0 +1,35 @@
+{
+  "name": "@zone-eu/types",
+  "version": "0.1.0",
+  "description": "Shared TypeScript types for the Zone.eu ZMS stack.",
+  "license": "EUPL-1.1+",
+  "type": "module",
+  "sideEffects": false,
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "check": "npm run build && npm run lint"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.4.0",
+    "eslint-config-nodemailer": "1.2.0",
+    "eslint-config-prettier": "10.1.8",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.59.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
