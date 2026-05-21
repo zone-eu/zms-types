@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/zone-eu/zms-types/compare/v0.1.3...v0.1.4) (2026-05-21)
+
+
+### Bug Fixes
+
+* add correct messageInfo type ([#8](https://github.com/zone-eu/zms-types/issues/8)) ([c47691a](https://github.com/zone-eu/zms-types/commit/c47691af4c9215f781d0138ec6ef7b861862b214))
+
 ## [0.1.3](https://github.com/zone-eu/zms-types/compare/v0.1.2...v0.1.3) (2026-05-21)
 
 
