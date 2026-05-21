@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/zone-eu/zms-types/compare/v0.1.2...v0.1.3) (2026-05-21)
+
+
+### Bug Fixes
+
+* fix workflow ([#6](https://github.com/zone-eu/zms-types/issues/6)) ([338da9b](https://github.com/zone-eu/zms-types/commit/338da9b0cc9cb640d11c8538cf1517f84c1b7e09))
+
 ## [0.1.2](https://github.com/zone-eu/zms-types/compare/v0.1.1...v0.1.2) (2026-05-21)
 
 
