@@ -429,11 +429,32 @@ export interface QueueListEntry {
   deferred: number;
 }
 
-export interface MessageInfoFields extends AnyRecord {}
-
 export interface MessageInfo extends AnyRecord {
-  keys?(): MessageInfoFields;
-  format?(): string;
+  "message-id": string;
+  from: string;
+  to: string;
+  src?: string;
+  subject?: string;
+  auth?: string;
+  body?: number;
+  md5?: string;
+  tests?: string;
+  score?: string;
+  keys(): MessageInfoFields;
+  format(): string;
+}
+
+export interface MessageInfoFields extends AnyRecord {
+  "message-id"?: string;
+  from?: string;
+  to?: string;
+  src?: string;
+  subject?: string;
+  auth?: string;
+  body?: number;
+  md5?: string;
+  tests?: string;
+  score?: string;
 }
 
 export interface SmtpAddress extends AnyRecord {
