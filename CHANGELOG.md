@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/zone-eu/zms-types/compare/v0.1.1...v0.1.2) (2026-05-21)
+
+
+### Bug Fixes
+
+* remove unnecessary deps, add repo info to package.json ([#4](https://github.com/zone-eu/zms-types/issues/4)) ([e725b91](https://github.com/zone-eu/zms-types/commit/e725b91f71623fa8122e7efaf03b279045912f6b))
+
 ## [0.1.1](https://github.com/zone-eu/zms-types/compare/v0.1.0...v0.1.1) (2026-05-20)
 
 
