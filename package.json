@@ -1,6 +1,6 @@
 {
   "name": "@zone-eu/types",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Shared TypeScript types for the Zone.eu ZMS stack.",
   "license": "EUPL-1.1+",
   "type": "module",
