@@ -6,6 +6,25 @@
   "type": "module",
   "sideEffects": false,
   "private": false,
+  "keywords": [
+    "wildduck",
+    "zonemta",
+    "zone-mta",
+    "plugins",
+    "plugin",
+    "zms",
+    "email",
+    "zms types",
+    "types"
+  ],
+  "homepage": "https://github.com/zone-eu/zms-types#readme",
+  "bugs": {
+    "url": "https://github.com/zone-eu/zms-types/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zone-eu/zms-types.git"
+  },
   "files": [
     "dist"
   ],
@@ -19,14 +38,12 @@
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "check": "npm run build && npm run lint"
+    "check": "npm run build && npm run lint",
+    "update": "rm -rf node_modules package-lock.json && ncu -u && npm install"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@types/node": "25.9.1",
-    "@zone-eu/wild-plugins": "1.0.6",
-    "@zone-eu/wildduck": "1.48.1",
-    "@zone-eu/zone-mta": "3.10.16",
     "eslint": "10.4.0",
     "eslint-config-nodemailer": "1.2.0",
     "eslint-config-prettier": "10.1.8",
