@@ -55,5 +55,9 @@
   },
   "dependencies": {
     "@zone-eu/mailsplit": "5.4.11"
+  },
+  "peerDependencies": {
+    "mongodb": "^4.0.0",
+    "ioredis": "^5.0.0"
   }
 }
