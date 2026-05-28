@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/zone-eu/zms-types/compare/v0.1.5...v0.1.6) (2026-05-28)
+
+
+### Bug Fixes
+
+* ZMS-63: Refactor types, add wd userdata type, stricten zone-mta types ([#12](https://github.com/zone-eu/zms-types/issues/12)) ([a507328](https://github.com/zone-eu/zms-types/commit/a5073287cbd12d7c875819757d80d0fe3c67be7d))
+
 ## [0.1.5](https://github.com/zone-eu/zms-types/compare/v0.1.4...v0.1.5) (2026-05-28)
 
 
