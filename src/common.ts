@@ -4,6 +4,18 @@ import type { Socket } from "node:net";
 import type { Readable, Writable } from "node:stream";
 import type { SecureContext } from "node:tls";
 import type {
+  Collection as MongoCollection,
+  Db as MongoDb,
+  Document as MongoDocument,
+  GridFSBucket as MongoGridFSBucket,
+  MongoClient,
+  UpdateFilter as MongoUpdateFilter
+} from "mongodb";
+import type {
+  Redis as IoredisRedis,
+  RedisOptions as IoredisRedisOptions
+} from "ioredis";
+import type {
   HeaderLine,
   MimeNode,
   RewriterNode,
@@ -23,138 +35,21 @@ export type QueueCallback<T = void> = (
   result?: T
 ) => void;
 
-export interface MongoCollectionLike extends AnyRecord {
-  collectionName?: string;
-  namespace?: string;
-  aggregate(...args: unknown[]): unknown;
-  bulkWrite(...args: unknown[]): unknown;
-  countDocuments(...args: unknown[]): unknown;
-  createIndex(...args: unknown[]): unknown;
-  deleteMany(...args: unknown[]): unknown;
-  deleteOne(...args: unknown[]): unknown;
-  distinct(...args: unknown[]): unknown;
-  drop(...args: unknown[]): unknown;
-  find(...args: unknown[]): unknown;
-  findOne(...args: unknown[]): unknown;
-  findOneAndDelete(...args: unknown[]): unknown;
-  findOneAndReplace(...args: unknown[]): unknown;
-  findOneAndUpdate(...args: unknown[]): unknown;
-  indexes(...args: unknown[]): unknown;
-  insertMany(...args: unknown[]): unknown;
-  insertOne(...args: unknown[]): unknown;
-  rename(...args: unknown[]): unknown;
-  replaceOne(...args: unknown[]): unknown;
-  updateMany(...args: unknown[]): unknown;
-  updateOne(...args: unknown[]): unknown;
-  watch(...args: unknown[]): unknown;
-}
-
-export interface MongoDbLike extends AnyRecord {
-  databaseName?: string;
-  namespace?: string;
-  options?: AnyRecord;
-  admin(...args: unknown[]): unknown;
-  aggregate(...args: unknown[]): unknown;
-  collection(...args: unknown[]): MongoCollectionLike;
-  collections(...args: unknown[]): unknown;
-  command(...args: unknown[]): unknown;
-  createCollection(...args: unknown[]): unknown;
-  createIndex(...args: unknown[]): unknown;
-  db(...args: unknown[]): MongoDbLike;
-  dropCollection(...args: unknown[]): unknown;
-  dropDatabase(...args: unknown[]): unknown;
-  indexInformation(...args: unknown[]): unknown;
-  listCollections(...args: unknown[]): unknown;
-  profilingLevel(...args: unknown[]): unknown;
-  removeUser(...args: unknown[]): unknown;
-  renameCollection(...args: unknown[]): unknown;
-  runCursorCommand(...args: unknown[]): unknown;
-  setProfilingLevel(...args: unknown[]): unknown;
-  stats(...args: unknown[]): unknown;
-  watch(...args: unknown[]): unknown;
-}
-
-export interface MongoGridFSBucketLike extends AnyRecord {
-  openDownloadStream(...args: unknown[]): Readable;
-  openDownloadStreamByName(...args: unknown[]): Readable;
-  openUploadStream(...args: unknown[]): Writable;
-  openUploadStreamWithId(...args: unknown[]): Writable;
-  delete(...args: unknown[]): unknown;
-  drop(...args: unknown[]): unknown;
-  find(...args: unknown[]): unknown;
-  rename(...args: unknown[]): unknown;
-}
-
-export interface MongoClientLike extends AnyRecord {
-  db(...args: unknown[]): MongoDbLike;
-  close(...args: unknown[]): unknown;
-  connect(...args: unknown[]): unknown;
-}
-
-export interface RedisLike extends AnyRecord {
-  options?: RedisOptionsLike;
-  status?: string;
-  stream?: unknown;
-  connector?: unknown;
-  commandQueue?: unknown;
-  offlineQueue?: unknown;
-  condition?: unknown;
-  isCluster?: boolean;
-  connect(...args: unknown[]): unknown;
-  disconnect(...args: unknown[]): unknown;
-  duplicate(...args: unknown[]): RedisLike;
-  defineCommand(...args: unknown[]): unknown;
-  pipeline(...args: unknown[]): unknown;
-  multi(...args: unknown[]): unknown;
-  quit(...args: unknown[]): unknown;
-  get(...args: unknown[]): unknown;
-  set(...args: unknown[]): unknown;
-  del(...args: unknown[]): unknown;
-  exists(...args: unknown[]): unknown;
-  expire(...args: unknown[]): unknown;
-  hget(...args: unknown[]): unknown;
-  hgetall(...args: unknown[]): unknown;
-  hset(...args: unknown[]): unknown;
-  hdel(...args: unknown[]): unknown;
-  hmset(...args: unknown[]): unknown;
-  incr(...args: unknown[]): unknown;
-  eval(...args: unknown[]): unknown;
-  publish(...args: unknown[]): unknown;
-  subscribe(...args: unknown[]): unknown;
-  unsubscribe(...args: unknown[]): unknown;
-  on(...args: unknown[]): unknown;
-  once(...args: unknown[]): unknown;
-}
-
-export interface RedisOptionsLike extends AnyRecord {
-  host?: string;
-  port?: number;
-  path?: string;
-  username?: string;
-  password?: string;
-  db?: number;
-  keyPrefix?: string;
-  tls?: AnyRecord;
-  family?: number;
-  connectTimeout?: number;
-  commandTimeout?: number;
-  enableOfflineQueue?: boolean;
-  enableReadyCheck?: boolean;
-  lazyConnect?: boolean;
-  maxRetriesPerRequest?: number | null;
-  retryStrategy?: (times: number) => number | void | null;
-  connectionName?: string;
-  sentinels?: Array<AnyRecord & { host?: string; port?: number }>;
-}
-
+export type MongoCollectionLike<
+  TSchema extends MongoDocument = MongoDocument
+> = MongoCollection<TSchema>;
+export type MongoDbLike = MongoDb;
+export type MongoGridFSBucketLike = MongoGridFSBucket;
+export type MongoClientLike = MongoClient;
+export type RedisLike = IoredisRedis;
+export type RedisOptionsLike = IoredisRedisOptions;
 export type Db = MongoDbLike;
 export type GridFSBucket = MongoGridFSBucketLike;
 export type Redis = RedisLike;
 export type RedisOptions = RedisOptionsLike;
-export type UpdateFilterLike<TSchema extends AnyRecord = AnyRecord> =
-  AnyRecord & Partial<TSchema>;
-export type UpdateFilter<TSchema extends AnyRecord = AnyRecord> =
-  UpdateFilterLike<TSchema>;
+export type UpdateFilterLike<TSchema = MongoDocument> =
+  MongoUpdateFilter<TSchema>;
+export type UpdateFilter<TSchema = MongoDocument> = UpdateFilterLike<TSchema>;
 
 export interface QueueConfig extends AnyRecord {
   connection: RedisOptionsLike;
