@@ -4,16 +4,16 @@ import type { Socket } from "node:net";
 import type { Readable, Writable } from "node:stream";
 import type { SecureContext } from "node:tls";
 import type {
-  Collection as MongoCollection,
-  Db as MongoDb,
+  Collection as MongoDriverCollection,
+  Db as MongoDriverDb,
   Document as MongoDocument,
-  GridFSBucket as MongoGridFSBucket,
-  MongoClient,
-  UpdateFilter as MongoUpdateFilter
+  GridFSBucket as MongoDriverGridFSBucket,
+  MongoClient as MongoDriverClient,
+  UpdateFilter as MongoDriverUpdateFilter
 } from "mongodb";
 import type {
-  Redis as IoredisRedis,
-  RedisOptions as IoredisRedisOptions
+  Redis as IoredisClient,
+  RedisOptions as IoredisClientOptions
 } from "ioredis";
 import type {
   HeaderLine,
@@ -35,35 +35,44 @@ export type QueueCallback<T = void> = (
   result?: T
 ) => void;
 
-export type MongoCollectionLike<
+export type MongoCollection<
   TSchema extends MongoDocument = MongoDocument
-> = MongoCollection<TSchema>;
-export type MongoDbLike = MongoDb;
-export type MongoGridFSBucketLike = MongoGridFSBucket;
-export type MongoClientLike = MongoClient;
-export type RedisLike = IoredisRedis;
-export type RedisOptionsLike = IoredisRedisOptions;
-export type Db = MongoDbLike;
-export type GridFSBucket = MongoGridFSBucketLike;
-export type Redis = RedisLike;
-export type RedisOptions = RedisOptionsLike;
-export type UpdateFilterLike<TSchema = MongoDocument> =
-  MongoUpdateFilter<TSchema>;
-export type UpdateFilter<TSchema = MongoDocument> = UpdateFilterLike<TSchema>;
+> = MongoDriverCollection<TSchema>;
+export type MongoDatabase = MongoDriverDb;
+export type MongoGridFSBucket = MongoDriverGridFSBucket;
+export type MongoClient = MongoDriverClient;
+export type RedisClient = IoredisClient;
+export type RedisClientOptions = IoredisClientOptions;
+export type MongoUpdateFilter<TSchema = MongoDocument> =
+  MongoDriverUpdateFilter<TSchema>;
+
+export type ConfigPrimitive = string | number | boolean | null | undefined;
+export type ConfigFunction = (...args: unknown[]) => unknown;
+export type ConfigValue =
+  | ConfigPrimitive
+  | ConfigObject
+  | ConfigValue[]
+  | ConfigFunction;
+
+export interface ConfigObject {
+  [key: string]: ConfigValue;
+}
+
+export type SmtpPasswordType = "asp" | "master" | (string & {});
 
 export interface QueueConfig extends AnyRecord {
-  connection: RedisOptionsLike;
+  connection: RedisClientOptions;
   prefix: string;
 }
 
 export interface DatabaseConnections extends AnyRecord {
-  mongoclient?: MongoClientLike | false;
-  database?: MongoDbLike | false;
-  gridfs?: MongoDbLike | false;
-  users?: MongoDbLike | false;
-  senderDb?: MongoDbLike | false;
-  redis?: RedisLike | false;
-  redisConfig?: RedisOptionsLike;
+  mongoclient?: MongoClient | false;
+  database?: MongoDatabase | false;
+  gridfs?: MongoDatabase | false;
+  users?: MongoDatabase | false;
+  senderDb?: MongoDatabase | false;
+  redis?: RedisClient | false;
+  redisConfig?: RedisClientOptions;
   queueConf?: QueueConfig;
 }
 
@@ -162,6 +171,7 @@ export type EnvelopeHeaders = Headers | HeaderLine[];
 export interface Envelope extends AnyRecord {
   id?: string;
   sessionId?: string;
+  session?: EnvelopeSession;
   interface?: string;
   from?: string;
   to?: EnvelopeAddressList;
@@ -171,7 +181,7 @@ export interface Envelope extends AnyRecord {
   transtype?: string;
   user?: string | false;
   userId?: string;
-  passwordType?: string;
+  passwordType?: SmtpPasswordType;
   time?: number | Date;
   tls?: string | AnyRecord;
   sendingZone?: string;
@@ -192,6 +202,18 @@ export interface Envelope extends AnyRecord {
   virus?: VirusScanResult;
   attachments?: EnvelopeAttachment[];
   sourceMd5?: string;
+}
+
+export interface EnvelopeSession extends AnyRecord {
+  id?: string;
+  interface?: string;
+  envelopeId?: string;
+  remoteAddress?: string;
+  remotePort?: number;
+  clientHostname?: string;
+  hostNameAppearsAs?: string;
+  transmissionType?: string;
+  user?: string | false;
 }
 
 export interface MessageHeadersEnvelope extends Envelope {
@@ -223,10 +245,20 @@ export interface MxAuthInfo extends AnyRecord {
   pass?: string;
 }
 
+export type MxPort = number | string;
+
+export interface MxRecord extends AnyRecord {
+  priority: number;
+  mx: boolean;
+  exchange: string;
+  A: string[];
+  AAAA: string[];
+}
+
 export interface RouteMxData extends AnyRecord {
-  mx?: string;
-  mxPort?: number;
-  mxAuth?: MxAuthInfo;
+  mx?: MxRecord[];
+  mxPort?: MxPort;
+  mxAuth?: MxAuthInfo | false;
   mxSecure?: boolean;
   skipSRS?: boolean;
   skipSTS?: boolean;
@@ -251,11 +283,11 @@ export interface QueueDelivery extends Envelope {
   _lock?: string;
   _deferred?: DeferredDeliveryInfo;
   envelope?: DeliveryEnvelope;
-  updates?: UpdateFilterLike | AnyRecord;
+  updates?: MongoUpdateFilter | AnyRecord;
   headers?: EnvelopeHeaders;
-  mx?: string;
-  mxPort?: number;
-  mxAuth?: MxAuthInfo;
+  mx?: MxRecord[];
+  mxPort?: MxPort;
+  mxAuth?: MxAuthInfo | false;
   mxSecure?: boolean;
   http?: boolean;
   targetUrl?: string;
@@ -381,6 +413,7 @@ export interface SmtpAuth extends AnyRecord {
   username: string;
   password?: string;
   method: string;
+  passwordType?: SmtpPasswordType;
 }
 
 export interface SniData extends AnyRecord {
@@ -399,7 +432,7 @@ export interface ApiSession extends AnyRecord {
   user?: string | false;
 }
 
-export interface MailDropLike extends AnyRecord {
+export interface MailDrop extends AnyRecord {
   add(
     envelope: Envelope,
     source: string | Buffer | Readable,
@@ -412,7 +445,7 @@ export interface SmtpInterface extends AnyRecord {
   options: AnyRecord;
   closing?: boolean;
   server?: unknown;
-  maildrop?: MailDropLike;
+  maildrop?: MailDrop;
   close(callback?: DoneCallback): void;
 }
 
@@ -545,6 +578,49 @@ export type AnalyzerEventHandler = (
   output: Writable
 ) => void;
 
+export interface RemoteLogOptions extends AnyRecord {
+  protocol: "udp4" | "udp6";
+  port: number;
+  host?: string;
+}
+
+export interface GelfOptions extends AnyRecord {
+  enabled?: boolean;
+  options?: AnyRecord;
+  component?: string;
+  hostname?: string;
+}
+
+export interface LogOptions extends AnyRecord {
+  gelf?: GelfOptions;
+  remote?: RemoteLogOptions;
+}
+
+export interface PluginConfigObject extends ConfigObject {
+  enabled?: boolean | string | Array<boolean | string>;
+  ordering?: number;
+  path?: string;
+}
+
+export type PluginConfig = true | PluginConfigObject;
+
+export interface PluginDefinition extends AnyRecord {
+  key: string;
+  path: string;
+  ordering: number;
+  config: PluginConfig;
+  title?: string;
+  module?: PluginModule;
+  db?: DatabaseConnections;
+  logger?: Logger;
+  log?: LogOptions;
+}
+
+export interface PluginModule<TPlugin = SharedPluginTools> {
+  title?: string;
+  init(plugin: TPlugin, done: DoneCallback): MaybePromise;
+}
+
 export interface SharedHookArgumentMap {
   "log:entry": [entry: RemoteLogEntry];
   "message:store": [envelope: MessageHookEnvelope, body: Readable];
@@ -582,22 +658,23 @@ export interface SharedStreamHookRegistrar {
 export interface SharedPluginTools
   extends SharedHookRegistrar,
     SharedStreamHookRegistrar {
+  options: PluginDefinition;
   logger: Logger;
   db: DatabaseConnections;
-  config: AnyRecord | true;
-  redis?: RedisLike | false;
-  mongodb?: MongoDbLike | false;
+  config: PluginConfig;
+  redis?: RedisClient | false;
+  mongodb?: MongoDatabase | false;
   gelf?: GelfEmitter;
   validateAddress(headers: Headers, key: string): ValidatedAddressList;
   remotelog(id: unknown, seq: unknown, action: string, data?: AnyRecord): void;
   loggelf(message: string | GelfMessage): void;
 }
 
-export interface MailQueueLike extends AnyRecord {
+export interface MailQueue extends AnyRecord {
   options: AnyRecord;
   instanceId?: string;
-  mongodb?: MongoDbLike | false;
-  gridstore?: MongoGridFSBucketLike | false;
+  mongodb?: MongoDatabase | false;
+  gridstore?: MongoGridFSBucket | false;
   closing?: boolean;
   store(
     id: string | false | null | undefined,
@@ -626,7 +703,7 @@ export interface MailQueueLike extends AnyRecord {
   update(
     id: string,
     seq: string | false | null | undefined,
-    update: UpdateFilterLike<QueueDelivery> | AnyRecord,
+    update: MongoUpdateFilter<QueueDelivery> | AnyRecord,
     callback: QueueCallback<number>
   ): void;
   getDelivery(

@@ -5,8 +5,8 @@ import type {
   Envelope,
   HookAction,
   HookHandler,
-  MailDropLike,
-  MailQueueLike,
+  MailDrop,
+  MailQueue,
   MaybePromise,
   MessageHeadersEnvelope,
   MessageInfo,
@@ -35,10 +35,10 @@ export interface ZoneMtaHookArgumentMap extends SharedHookArgumentMap {
     envelope: MessageHeadersEnvelope,
     messageInfo: MessageInfo
   ];
-  "queue:bounce": [bounce: BounceDelivery, maildrop: MailDropLike];
+  "queue:bounce": [bounce: BounceDelivery, maildrop: MailDrop];
   "queue:delayed": [
     bounce: BounceDelivery,
-    maildrop: MailDropLike,
+    maildrop: MailDrop,
     options: QueueDelayedOptions
   ];
   "queue:release": [zone: SendingZone, data: QueueReleaseData];
@@ -117,7 +117,7 @@ export interface ZoneMtaHookRunner {
 export interface ZoneMtaPluginTools
   extends Omit<SharedPluginTools, "addHook">,
     ZoneMtaHookRegistrar {
-  getQueue(): MailQueueLike | false;
+  getQueue(): MailQueue | false;
   drop(
     envelope: Envelope | string,
     description?: string,
