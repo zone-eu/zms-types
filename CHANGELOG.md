@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/zone-eu/zms-types/compare/v0.1.4...v0.1.5) (2026-05-28)
+
+
+### Bug Fixes
+
+* ZMS-63: use mongodb and ioredis types ([#10](https://github.com/zone-eu/zms-types/issues/10)) ([c37603f](https://github.com/zone-eu/zms-types/commit/c37603f4ad46a97ca46770f0d57836ab99045c39))
+
 ## [0.1.4](https://github.com/zone-eu/zms-types/compare/v0.1.3...v0.1.4) (2026-05-21)
 
 
