@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/zone-eu/zms-types/compare/v0.1.6...v0.1.7) (2026-10-08)
+
+
+### Bug Fixes
+
+* bump mongo version ([#14](https://github.com/zone-eu/zms-types/issues/14)) ([35ade60](https://github.com/zone-eu/zms-types/commit/35ade60a393eca112b57357dc94a9ab1ffde729c))
+
 ## [0.1.6](https://github.com/zone-eu/zms-types/compare/v0.1.5...v0.1.6) (2026-05-28)
 
 
