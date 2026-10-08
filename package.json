@@ -48,16 +48,17 @@
     "eslint-config-nodemailer": "1.2.0",
     "eslint-config-prettier": "10.1.8",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.59.4"
+    "typescript-eslint": "8.59.4",
+    "mongodb": "^7.7.0"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
-    "@zone-eu/mailsplit": "5.4.11"
+    "@zone-eu/mailsplit": "5.4.11"  
   },
   "peerDependencies": {
-    "mongodb": "^4.0.0",
-    "ioredis": "^5.0.0"
+    "ioredis": "^5.0.0",
+    "mongodb": "^7.7.0"
   }
 }
