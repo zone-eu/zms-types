@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/zone-eu/zms-types/compare/v0.1.7...v0.1.8) (2026-10-30)
+
+
+### Bug Fixes
+
+* **deps:** allow multiple mongodb and redis versions ([#16](https://github.com/zone-eu/zms-types/issues/16)) ([fc94a90](https://github.com/zone-eu/zms-types/commit/fc94a90af51d867f77ec5cc21b3c5e4940844a55))
+
 ## [0.1.7](https://github.com/zone-eu/zms-types/compare/v0.1.6...v0.1.7) (2026-10-08)
 
 
